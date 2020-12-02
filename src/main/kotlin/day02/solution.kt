@@ -1,14 +1,16 @@
 package day02
 
-fun partA(lines: Collection<String>) = lines
-    .map { it.split(" ") }
-    .map { Pair(OccurrencePasswordPolicy(it[1].first(), Occurrence.from(it[0])), it[2]) }
-    .filter { (policy, password) -> policy.isValid(password) }
-    .count()
+fun partA(lines: Collection<String>) = processPasswords(lines) { character, data ->
+    OccurrencePasswordPolicy(character, Occurrence.from(data))
+}
 
-fun partB(lines: Collection<String>) = lines
+fun partB(lines: Collection<String>) = processPasswords(lines) { character, data ->
+    PositionPasswordPolicy(character, Position.from(data))
+}
+
+private fun processPasswords(lines: Collection<String>, policyProvider: (Char, String) -> PasswordPolicy) = lines
     .map { it.split(" ") }
-    .map { Pair(PositionPasswordPolicy(it[1].first(), Position.from(it[0])), it[2]) }
+    .map { Pair(policyProvider(it[1].first(), it[0]), it[2]) }
     .filter { (policy, password) -> policy.isValid(password) }
     .count()
 
