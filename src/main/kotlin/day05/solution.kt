@@ -14,10 +14,10 @@ fun partB(lines: Collection<String>) = lines
     .first { it.second > 0 }.first.second
 
 tailrec fun find(code: String, rows: IntRange): Int {
-    val center = rows.count()/2
-    return when(code.take(1)) {
-        "F", "L" -> find(code.drop(1), rows.first until (rows.first+center))
-        "B", "R" -> find(code.drop(1), (rows.first+center)..rows.last)
+    val center = rows.first + rows.count() / 2
+    return when (code.take(1)) {
+        "F", "L" -> find(code.drop(1), rows.first until center)
+        "B", "R" -> find(code.drop(1), center..rows.last)
         else -> rows.first
     }
 }
