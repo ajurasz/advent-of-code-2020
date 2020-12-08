@@ -7,9 +7,9 @@ data class Acc(val value: Int) : Instruction()
 data class Jmp(val value: Int) : Instruction()
 data class Nop(val value: Int) : Instruction()
 
-sealed class Result(val value: Int)
-data class Success(private val _value: Int) : Result(_value)
-data class Failure(private val _value: Int) : Result(_value)
+sealed class Result(open val value: Int)
+data class Success(override val value: Int) : Result(value)
+data class Failure(override val value: Int) : Result(value)
 
 typealias Code = ArrayList<Instruction>
 
