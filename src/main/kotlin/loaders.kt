@@ -5,6 +5,7 @@ inline fun <reified T> load(file: String): List<T> =
         .map {
             when (T::class) {
                 Long::class -> it.toLong()
+                Int::class -> it.toInt()
                 else -> it
             } as T
         }
