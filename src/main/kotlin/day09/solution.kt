@@ -18,10 +18,11 @@ fun partA(lines: Collection<Long>, preambleSize: Int = 25) = lines.windowed(prea
 private fun isNotValid(encryption: Encryption) =
     encryption.preamble.any { encryption.preamble.contains(encryption.num - it) }.not()
 
-fun partB(lines: Collection<Long>, sum: Long) = ((0..lines.count()).asSequence()
+fun partB(lines: Collection<Long>, sum: Long) = (0..lines.count()).asSequence()
     .map { lines.drop(it) }
     .map { toRanges(sum, it) }
-    .first { it is ValidRange } as ValidRange)
+    .filterIsInstance(ValidRange::class.java)
+    .first()
     .weakness()
 
 private fun toRanges(sum: Long, numbers: List<Long>): Range {
