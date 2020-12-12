@@ -47,7 +47,6 @@ class Layout(private val grid: Grid) {
 
     private fun farNeighborsCounter(row: Int, col: Int) =
         adjacent
-            .filter { (dr, dc) -> row + dr in 0 until rows && col + dc in 0 until columns }
             .mapNotNull { (dr, dc) -> findFarNeighbors(row, col, dr, dc) }
             .filterIsInstance(Occupied::class.java)
             .count()
