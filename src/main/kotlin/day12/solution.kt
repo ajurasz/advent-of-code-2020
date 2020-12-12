@@ -45,14 +45,11 @@ class Ship {
                 90 ->  position + Position(0, move.second)
                 180 ->  position - Position(move.second, 0)
                 270 ->  position - Position(0, move.second)
-                -90 ->  position - Position(0, move.second)
-                -180 ->  position - Position(move.second, 0)
-                -270 ->  position + Position(0, move.second)
                 else -> throw RuntimeException("Unknown direction $direction")
             }
 
             move.first == R -> {
-                direction = (direction - move.second) % 360
+                direction = ((direction - move.second) + 360) % 360
                 position
             }
             move.first == L -> {
