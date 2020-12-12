@@ -15,4 +15,14 @@ class SolutionSpec : Spek({
             assertThat(partA(load("day11.txt"))).isEqualTo(2316)
         }
     }
+
+    describe("Part B") {
+        it("should resolve test scenario") {
+            assertThat(partB(load("day11_test.txt"))).isEqualTo(26)
+        }
+
+        it("should resolve final scenario") {
+                assertThat(partB(load("day11.txt"))).isEqualTo(2128)
+        }
+    }
 })
