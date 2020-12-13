@@ -27,44 +27,78 @@ class Ship {
     private var direction = 0
     private var position = Position(0, 0)
 
+    fun distance() = abs(position.x) + abs(position.y)
+
     fun go(moves: Collection<Move>) {
         moves.forEach { position = moveBy(it) }
     }
 
-    fun position() = position.copy()
-
     private fun moveBy(move: Move): Position {
-        return when {
-            move.first == N -> position + Position(0, move.second)
-            move.first == S -> position - Position(0, move.second)
-            move.first == E -> position + Position(move.second, 0)
-            move.first == W -> position - Position(move.second, 0)
-
-            move.first == F -> when(direction) {
-                0 ->  position + Position(move.second, 0)
-                90 ->  position + Position(0, move.second)
-                180 ->  position - Position(move.second, 0)
-                270 ->  position - Position(0, move.second)
+        return when (move.first) {
+            N -> position + Position(0, move.second)
+            S -> position - Position(0, move.second)
+            E -> position + Position(move.second, 0)
+            W -> position - Position(move.second, 0)
+            F -> when (direction) {
+                0 -> position + Position(move.second, 0)
+                90 -> position + Position(0, move.second)
+                180 -> position - Position(move.second, 0)
+                270 -> position - Position(0, move.second)
                 else -> throw RuntimeException("Unknown direction $direction")
             }
-
-            move.first == R -> {
+            R -> {
                 direction = ((direction - move.second) + 360) % 360
                 position
             }
-            move.first == L -> {
+            L -> {
                 direction = (direction + move.second) % 360
                 position
             }
-            else -> throw RuntimeException("Unsupported move $move")
+        }
+    }
+}
+
+class Ship2 {
+    private var position = Position(0, 0)
+    private var waypoint = Position(10, 1)
+
+    fun distance() = abs(position.x) + abs(position.y)
+
+    fun go(moves: Collection<Move>) {
+        moves.forEach(::moveBy)
+    }
+
+    private fun moveBy(move: Move) {
+        when (move.first) {
+            N -> waypoint += Position(0, move.second)
+            S -> waypoint -= Position(0, move.second)
+            E -> waypoint += Position(move.second, 0)
+            W -> waypoint -= Position(move.second, 0)
+            F -> position = (1..move.second).fold(position) { acc, _ -> acc + waypoint }
+            R -> (0 until (move.second / 90)).forEach {
+                waypoint = Position(waypoint.y, waypoint.x * -1)
+            }
+            L -> (0 until (move.second / 90)).forEach {
+                waypoint = Position(waypoint.y * -1, waypoint.x)
+            }
         }
     }
 }
 
 fun partA(lines: Collection<String>): Int {
     val moves = toMoves(lines)
-    val map = Ship().also { it.go(moves) }
-    return abs(map.position().x) + abs(map.position().y)
+    return Ship().let {
+        it.go(moves)
+        it.distance()
+    }
+}
+
+fun partB(lines: Collection<String>): Int {
+    val moves = toMoves(lines)
+    return Ship2().let {
+        it.go(moves)
+        it.distance()
+    }
 }
 
 private fun toMoves(lines: Collection<String>) = lines
